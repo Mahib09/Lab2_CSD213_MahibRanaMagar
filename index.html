@@ -8,17 +8,23 @@
   <body>
     <p>Mahib Rana Magar 22067423</p>
     <div>
-      <button onclick="getName()">All Names</button><br /><br />
+      <button onclick="getName()">All Names</button>
+      <br /><br />
       <button onclick="getHealthIssue()">Health Issues</button>
-      <input placeholder="" type="text" id="healthIssueNumber" /><br /><br />
+      <input placeholder="" type="text" id="healthIssueNumber" />
+      <br /><br />
       <input type="radio" name="weight" id="imperial" checked/>
       <label for="imperial">Imperial</label>
       <input type="radio" name="weight" id="metric" />
       <label for="metric">Metric</label>
-      <button onclick="getWeight()">Weight</button><br /><br />
-      <button>Intelligence - Friendly</button><br /><br />
-      <button>Average Intelligence</button><br /><br />
-      <button>Average Intelligence for Child Friendly=4</button><br /><br />
+      <button onclick="getWeight()">Weight</button>
+      <br /><br />
+      <button onclick="getIntelligenceAndFriendly()">Intelligence - Friendly</button>
+      <br /><br />
+      <button>Average Intelligence</button>
+      <br /><br />
+      <button>Average Intelligence for Child Friendly=4</button>
+      <br /><br />
     </div>
     <div id="upperContent"></div>
     <div id="putContent"></div>
@@ -135,6 +141,30 @@
                 }
             });
             upperContent.append(document.createElement("p").innerHTML="Weight in "+weight);
+            upperContent.append(document.createElement("br"));
+            upperContent.append(document.createElement("HR"));
+          })
+          .catch((error) => {
+            console.error("Error fetching JSON:", error);
+          });
+      }
+      function getIntelligenceAndFriendly(){
+        clearData();
+        fetch(url)
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error("Something went wrong.");
+            }
+            return response.json();
+          })
+          .then((data) => {
+            Object.values(data).forEach((value) => {
+            dataIntelligence=value.intelligence;
+            dataFriendly=value.child_friendly;
+            putContent.append(document.createElement("p").innerHTML=dataIntelligence+" - "+dataFriendly)
+            putContent.append(document.createElement("br"))
+            });
+            upperContent.append(document.createElement("p").innerHTML="I - F");
             upperContent.append(document.createElement("br"));
             upperContent.append(document.createElement("HR"));
           })
