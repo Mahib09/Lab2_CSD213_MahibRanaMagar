@@ -11,102 +11,137 @@
       <button onclick="getName()">All Names</button><br /><br />
       <button onclick="getHealthIssue()">Health Issues</button>
       <input placeholder="" type="text" id="healthIssueNumber" /><br /><br />
-      <input type="radio" name="weight" id="imperial" checked />
+      <input type="radio" name="weight" id="imperial" checked/>
       <label for="imperial">Imperial</label>
       <input type="radio" name="weight" id="metric" />
       <label for="metric">Metric</label>
-      <button>Weight</button><br /><br />
+      <button onclick="getWeight()">Weight</button><br /><br />
       <button>Intelligence - Friendly</button><br /><br />
       <button>Average Intelligence</button><br /><br />
       <button>Average Intelligence for Child Friendly=4</button><br /><br />
-      <div id="upperContent"></div>
-      <div id="putContent"></div>
-      <div id="lowerContent"></div>
+    </div>
+    <div id="upperContent"></div>
+    <div id="putContent"></div>
+    <div id="lowerContent"></div>
 
-      <script>
-        var content = document.getElementById("putContent");
-        var upperContent = document.getElementById("upperContent");
-        var lowerContent = document.getElementById("lowerContent");
+    <script>
+      var content = document.getElementById("putContent");
+      var upperContent = document.getElementById("upperContent");
+      var lowerContent = document.getElementById("lowerContent");
+      const url = "https://api.thecatapi.com/v1/breeds";
+      var count = 0;
 
-        const url = "https://api.thecatapi.com/v1/breeds";
-        var count = 0;
-        function getName() {
-          content.innerHTML = " ";
-          upperContent.innerHTML = " ";
-          lowerContent.innerHTML = " ";
-          fetch(url)
-            .then((response) => {
-              if (!response.ok) {
-                throw new Error("Something went wrong.");
-              }
-              return response.json();
-            })
-            .then((data) => {
-              Object.values(data).forEach((value) => {
+      function clearData() {
+        content.innerHTML = " ";
+        upperContent.innerHTML = " ";
+        lowerContent.innerHTML = " ";
+      }
+
+      function getName() {
+        clearData();
+        fetch(url)
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error("Something went wrong.");
+            }
+            return response.json();
+          })
+          .then((data) => {
+            Object.values(data).forEach((value) => {
+              count++;
+              dataName = value.name;
+              putContent.append(
+                (document.createElement("p").innerHTML = dataName)
+              );
+              putContent.appendChild(document.createElement("br"));
+            });
+            upperContent.append(
+              (document.createElement("p").innerHTML =
+                "All Names (Total = " + count + ")")
+            );
+            upperContent.appendChild(document.createElement("br"));
+            upperContent.appendChild(document.createElement("HR"));
+          })
+          .catch((error) => {
+            console.error("Error fetching JSON:", error);
+          });
+      }
+
+      function getHealthIssue() {
+        clearData();
+        noHealthIssue = document.getElementById("healthIssueNumber").value;
+        rexNoHealthIssue = parseInt(noHealthIssue);
+        fetch(url)
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error("Something went wrong.");
+            }
+            return response.json();
+          })
+          .then((data) => {
+            Object.values(data).forEach((value) => {
+              // putcontent.appendChild(document.createTextNode(value.origin));
+              allHealthIssue = value.health_issues;
+              if (allHealthIssue == rexNoHealthIssue) {
+                dataHealthIssue = value.name;
                 count++;
-                // putcontent.appendChild(document.createTextNode(value.origin));
-                dataName = value.name;
                 // putcontent.appendChild('<p>'+datas+'</p>');
                 putContent.append(
-                  (document.createElement("p").innerHTML = dataName)
+                  (document.createElement("p").innerHTML = dataHealthIssue)
                 );
                 putContent.appendChild(document.createElement("br"));
-              });
-              upperContent.append(
-                (document.createElement("p").innerHTML =
-                  "All Names (Total = " + count + ")")
-              );
-              upperContent.appendChild(document.createElement("br"));
-              upperContent.appendChild(document.createElement("HR"));
-            })
-            .catch((error) => {
-              console.error("Error fetching JSON:", error);
-            });
-        }
-        function getHealthIssue() {
-          content.innerHTML = " ";
-          upperContent.innerHTML = " ";
-          lowerContent.innerHTML = " ";
-          noHealthIssue = document.getElementById("healthIssueNumber").value;
-          rexNoHealthIssue = parseInt(noHealthIssue);
-          fetch(url)
-            .then((response) => {
-              if (!response.ok) {
-                throw new Error("Something went wrong.");
               }
-              return response.json();
-            })
-            .then((data) => {
-              Object.values(data).forEach((value) => {
-                // putcontent.appendChild(document.createTextNode(value.origin));
-                allHealthIssue = value.health_issues;
-                if (allHealthIssue == rexNoHealthIssue) {
-                  dataHealthIssue = value.name;
-                  count++;
-                  // putcontent.appendChild('<p>'+datas+'</p>');
-                  putContent.append(
-                    (document.createElement("p").innerHTML = dataHealthIssue)
-                  );
-                  putContent.appendChild(document.createElement("br"));
-                }
-              });
-              upperContent.append(
-                (document.createElement("p").innerHTML =
-                  "Health Issues for " + rexNoHealthIssue + ":")
-              );
-              upperContent.append(document.createElement("br"));
-              upperContent.append(document.createElement("HR"));
-              lowerContent.append(document.createElement("br"));
-              lowerContent.append(document.createElement("HR"));
-              lowerContent.append(
-                (document.createElement("p").innerHTML = "total =" + count)
-              );
-            })
-            .catch((error) => {
-              console.error("Error fetching JSON:", error);
             });
-        }
-      </script>
-    </div>
+            upperContent.append(
+              (document.createElement("p").innerHTML =
+                "Health Issues for " + rexNoHealthIssue + ":")
+            );
+            upperContent.append(document.createElement("br"));
+            upperContent.append(document.createElement("HR"));
+            lowerContent.append(document.createElement("br"));
+            lowerContent.append(document.createElement("HR"));
+            lowerContent.append(
+              (document.createElement("p").innerHTML = "total =" + count)
+            );
+          })
+          .catch((error) => {
+            console.error("Error fetching JSON:", error);
+          });
+      }
+
+      function getWeight() {
+        clearData();
+        let check=document.getElementById("imperial");
+        fetch(url)
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error("Something went wrong.");
+            }
+            return response.json();
+          })
+          .then((data) => {
+            Object.values(data).forEach((value) => {
+                if(check.checked==true){
+                    count++;
+                    weight="Imperial"
+                    dataWeight=value.weight.imperial
+                    putContent.append(document.createElement("p").innerHTML=dataWeight);
+                    putContent.appendChild(document.createElement("br"));
+                }else {
+                    weight="Metric"
+                    dataWeight=value.weight.metric
+                    putContent.append(document.createElement("p").innerHTML=dataWeight);
+                    putContent.appendChild(document.createElement("br"));
+                }
+            });
+            upperContent.append(document.createElement("p").innerHTML="Weight in "+weight);
+            upperContent.append(document.createElement("br"));
+            upperContent.append(document.createElement("HR"));
+          })
+          .catch((error) => {
+            console.error("Error fetching JSON:", error);
+          });
+      }
+    </script>
   </body>
 </html>
