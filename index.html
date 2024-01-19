@@ -13,18 +13,22 @@
       <button onclick="getHealthIssue()">Health Issues</button>
       <input placeholder="" type="text" id="healthIssueNumber" />
       <br /><br />
-      <input type="radio" name="weight" id="imperial" checked/>
+      <input type="radio" name="weight" id="imperial" checked />
       <label for="imperial">Imperial</label>
       <input type="radio" name="weight" id="metric" />
       <label for="metric">Metric</label>
       <button onclick="getWeight()">Weight</button>
       <br /><br />
-      <button onclick="getIntelligenceAndFriendly()">Intelligence - Friendly</button>
+      <button onclick="getIntelligenceAndFriendly()">
+        Intelligence - Friendly
+      </button>
       <br /><br />
       <button onclick="getAverageIntelligence()">Average Intelligence</button>
       <br /><br />
-      <button onclick="getAverageIntelligenceForChildFriendly()">Average Intelligence for Child Friendly</button>
-      <input type="number" id="catIntelligence" value="4">
+      <button onclick="getAverageIntelligenceForChildFriendly()">
+        Average Intelligence for Child Friendly
+      </button>
+      <input type="number" id="catIntelligence" value="4" />
       <br /><br />
     </div>
     <div id="upperContent"></div>
@@ -42,7 +46,7 @@
         content.innerHTML = " ";
         upperContent.innerHTML = " ";
         lowerContent.innerHTML = " ";
-        count=0;
+        count = 0;
       }
 
       function getName() {
@@ -119,7 +123,7 @@
 
       function getWeight() {
         clearData();
-        let check=document.getElementById("imperial");
+        let check = document.getElementById("imperial");
         fetch(url)
           .then((response) => {
             if (!response.ok) {
@@ -129,20 +133,26 @@
           })
           .then((data) => {
             Object.values(data).forEach((value) => {
-                if(check.checked==true){
-                    count++;
-                    weight="Imperial"
-                    dataWeight=value.weight.imperial
-                    putContent.append(document.createElement("p").innerHTML=dataWeight);
-                    putContent.appendChild(document.createElement("br"));
-                }else {
-                    weight="Metric"
-                    dataWeight=value.weight.metric
-                    putContent.append(document.createElement("p").innerHTML=dataWeight);
-                    putContent.appendChild(document.createElement("br"));
-                }
+              if (check.checked == true) {
+                count++;
+                weight = "Imperial";
+                dataWeight = value.weight.imperial;
+                putContent.append(
+                  (document.createElement("p").innerHTML = dataWeight)
+                );
+                putContent.appendChild(document.createElement("br"));
+              } else {
+                weight = "Metric";
+                dataWeight = value.weight.metric;
+                putContent.append(
+                  (document.createElement("p").innerHTML = dataWeight)
+                );
+                putContent.appendChild(document.createElement("br"));
+              }
             });
-            upperContent.append(document.createElement("p").innerHTML="Weight in "+weight);
+            upperContent.append(
+              (document.createElement("p").innerHTML = "Weight in " + weight)
+            );
             upperContent.append(document.createElement("br"));
             upperContent.append(document.createElement("HR"));
           })
@@ -151,7 +161,7 @@
           });
       }
 
-      function getIntelligenceAndFriendly(){
+      function getIntelligenceAndFriendly() {
         clearData();
         fetch(url)
           .then((response) => {
@@ -162,12 +172,17 @@
           })
           .then((data) => {
             Object.values(data).forEach((value) => {
-            dataIntelligence=value.intelligence;
-            dataFriendly=value.child_friendly;
-            putContent.append(document.createElement("p").innerHTML=dataIntelligence+" - "+dataFriendly)
-            putContent.append(document.createElement("br"))
+              dataIntelligence = value.intelligence;
+              dataFriendly = value.child_friendly;
+              putContent.append(
+                (document.createElement("p").innerHTML =
+                  dataIntelligence + " - " + dataFriendly)
+              );
+              putContent.append(document.createElement("br"));
             });
-            upperContent.append(document.createElement("p").innerHTML="I - F");
+            upperContent.append(
+              (document.createElement("p").innerHTML = "I - F")
+            );
             upperContent.append(document.createElement("br"));
             upperContent.append(document.createElement("HR"));
           })
@@ -176,9 +191,9 @@
           });
       }
 
-      function getAverageIntelligence(){
+      function getAverageIntelligence() {
         clearData();
-        let total=0;
+        let total = 0;
         fetch(url)
           .then((response) => {
             if (!response.ok) {
@@ -188,13 +203,16 @@
           })
           .then((data) => {
             Object.values(data).forEach((value) => {
-                count++
-                dataIntelligence=parseInt(value.intelligence);
+              count++;
+              dataIntelligence = parseInt(value.intelligence);
 
-                total=total+dataIntelligence;
+              total = total + dataIntelligence;
             });
-            average=total/count;
-            upperContent.append(document.createElement("p").innerHTML="Average Intelligence: "+average.toFixed(2));
+            average = total / count;
+            upperContent.append(
+              (document.createElement("p").innerHTML =
+                "Average Intelligence: " + average.toFixed(2))
+            );
             upperContent.append(document.createElement("br"));
             upperContent.append(document.createElement("HR"));
           })
@@ -203,10 +221,10 @@
           });
       }
 
-      function getAverageIntelligenceForChildFriendly(){
+      function getAverageIntelligenceForChildFriendly() {
         clearData();
-        num=document.getElementById("catIntelligence").value
-        let total=0;
+        num = document.getElementById("catIntelligence").value;
+        let total = 0;
         fetch(url)
           .then((response) => {
             if (!response.ok) {
@@ -216,22 +234,33 @@
           })
           .then((data) => {
             Object.values(data).forEach((value) => {
-                childFriendlyValue=parseInt(value.child_friendly);
-                if(childFriendlyValue==num){
-                    count++
-                    dataIntelligence=parseInt(value.intelligence);
-                    total=total+dataIntelligence;
-                }
+              childFriendlyValue = parseInt(value.child_friendly);
+              return childFriendlyValue
+              if (childFriendlyValue == num) {
+                count++;
+                dataIntelligence = parseInt(value.intelligence);
+                total = total + dataIntelligence;
+              }
             });
-            average=total/count;
-            upperContent.append(document.createElement("p").innerHTML="Average Intelligence: "+average.toFixed(2));
+            average = total / count;
+            if(isNaN(average)){
+                upperContent.append(
+              (document.createElement("p").innerHTML =
+                "NO Cat with given Child Friendliness. ")
+            ); 
+            }else{
+                upperContent.append(
+              (document.createElement("p").innerHTML =
+                "Average Intelligence: " + average.toFixed(2))
+                );
+            }
+            
             upperContent.append(document.createElement("br"));
             upperContent.append(document.createElement("HR"));
           })
           .catch((error) => {
             console.error("Error fetching JSON:", error);
           });
-
       }
     </script>
   </body>
