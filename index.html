@@ -21,7 +21,7 @@
       <br /><br />
       <button onclick="getIntelligenceAndFriendly()">Intelligence - Friendly</button>
       <br /><br />
-      <button>Average Intelligence</button>
+      <button onclick="getAverageIntelligence()">Average Intelligence</button>
       <br /><br />
       <button>Average Intelligence for Child Friendly=4</button>
       <br /><br />
@@ -148,6 +148,7 @@
             console.error("Error fetching JSON:", error);
           });
       }
+
       function getIntelligenceAndFriendly(){
         clearData();
         fetch(url)
@@ -172,6 +173,34 @@
             console.error("Error fetching JSON:", error);
           });
       }
+
+      function getAverageIntelligence(){
+        clearData();
+        let total=0;
+        fetch(url)
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error("Something went wrong.");
+            }
+            return response.json();
+          })
+          .then((data) => {
+            Object.values(data).forEach((value) => {
+                count++
+                dataIntelligence=parseInt(value.intelligence);
+
+                total=total+dataIntelligence;
+            });
+            average=total/count;
+            upperContent.append(document.createElement("p").innerHTML="Average Intelligence: "+average.toFixed(2));
+            upperContent.append(document.createElement("br"));
+            upperContent.append(document.createElement("HR"));
+          })
+          .catch((error) => {
+            console.error("Error fetching JSON:", error);
+          });
+      }
+      
     </script>
   </body>
 </html>
