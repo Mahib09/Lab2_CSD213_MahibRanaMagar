@@ -235,7 +235,6 @@
           .then((data) => {
             Object.values(data).forEach((value) => {
               childFriendlyValue = parseInt(value.child_friendly);
-              return childFriendlyValue
               if (childFriendlyValue == num) {
                 count++;
                 dataIntelligence = parseInt(value.intelligence);
@@ -246,7 +245,7 @@
             if(isNaN(average)){
                 upperContent.append(
               (document.createElement("p").innerHTML =
-                "NO Cat with given Child Friendliness. ")
+                "NO Cat with Child Friendliness of ")
             ); 
             }else{
                 upperContent.append(
